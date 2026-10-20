@@ -1,0 +1,105 @@
+Aqui está o **README.md** bilíngue (Português e Inglês), estruturado profissionalmente para o seu repositório no GitHub, mantendo todos os detalhes, explicações e emojis.
+
+---
+
+# 🛡️ Py-Nmap Terminal CLI
+
+> **[🇧🇷 Português](https://www.google.com/search?q=%23-portugu%C3%AAs)** | **[🇺🇸 English](https://www.google.com/search?q=%23-english)**
+
+---
+
+## 🇧🇷 Português
+
+### 🧐 O que é este projeto?
+
+O **Py-Nmap Terminal** é um simulador de scanner de portas executado diretamente no terminal em formato CLI (Command Line Interface). Inspirado no clássico `nmap`, ele permite que administradores de rede, estudantes de segurança da informação e entusiastas realizem varreduras TCP em alvos locais ou remotos de forma controlada, rápida e modular.
+
+O projeto foi construído para demonstrar conceitos avançados de programação em Python, como manipulação de sockets de rede, paralelismo com ThreadPools, resolução de DNS e tratamento rigoroso de exceções de sistema e rede.
+
+### ✨ Principais Funcionalidades
+
+* 🚀 **Varredura Concorrente:** Utiliza `ThreadPoolExecutor` para testar centenas de portas em segundos sem travar a aplicação.
+* 🔍 **Banner Grabbing Inteligente:** Tenta capturar a assinatura do serviço rodando na porta (como versões de SSH, FTP e cabeçalhos HTTP).
+* ⏱️ **Medição de Latência:** Calcula o tempo de resposta (RTT) em milissegundos de cada porta ativa.
+* 💻 **Interface CLI Interativa:** Um ambiente próprio com prompt dinâmico, gerenciamento de estados, histórico e menu de ajuda (`help`).
+* 🛡️ **Resiliência e Tratamento de Erros:** Trata falhas de DNS, timeouts de rede, estouro de descritores de arquivos e interrupções manuais (`Ctrl+C`).
+
+### 🏗️ Arquitetura e POO (Como funciona por dentro)
+
+O código é altamente modularizado, dividido em três classes principais:
+
+* `TargetResolver`: Isola a lógica de tradução de nomes de domínio (DNS) para endereços IP.
+* `NetworkScanner`: O motor de rede que cria sockets TCP, executa o *TCP Connect Scan* e faz o *Banner Grabbing*.
+* `TerminalInterface`: Gerencia o loop interativo do terminal e valida as entradas do usuário.
+
+### 🕹️ Comandos Disponíveis no Terminal
+
+| Comando | Descrição | Exemplo |
+| --- | --- | --- |
+| `help` | Exibe o menu de ajuda com todos os comandos. | `help` |
+| `set target <host>` | Define o IP ou domínio alvo da varredura. | `set target scanme.nmap.org` |
+| `set ports <range/lista>` | Define as portas (suporta intervalos e vírgulas). | `set ports 1-1024` ou `set ports 80,443,22` |
+| `set timeout <seg>` | Define o tempo limite (em segundos) de espera do socket. | `set timeout 1.5` |
+| `set threads <qtd>` | Define o número de threads simultâneas. | `set threads 50` |
+| `show options` | Exibe um resumo das configurações atuais da sessão. | `show options` |
+| `scan` | Dispara a varredura de portas no alvo configurado. | `scan` |
+| `results` | Mostra os resultados detalhados da última varredura. | `results` |
+| `clear` | Limpa a tela do terminal. | `clear` |
+| `exit` | Encerra a aplicação de forma segura. | `exit` |
+
+
+---
+
+---
+
+## 🇺🇸 English
+
+### 🧐 What is this project?
+
+**Py-Nmap Terminal** is an advanced educational network reconnaissance tool and port scanner CLI (Command Line Interface) inspired by the classic `nmap`. It allows network administrators, cybersecurity students, and enthusiasts to perform TCP port scans on local or remote targets in a controlled, fast, and modular way.
+
+The project demonstrates advanced Python programming concepts, such as low-level network socket manipulation, concurrency with ThreadPools, DNS resolution, and robust exception handling.
+
+### ✨ Key Features
+
+* 🚀 **Concurrent Scanning:** Uses `ThreadPoolExecutor` to test hundreds of ports in seconds without freezing.
+* 🔍 **Smart Banner Grabbing:** Attempts to capture service signatures running on open ports (such as SSH, FTP versions, and HTTP headers).
+* ⏱️ **Latency Measurement:** Calculates the round-trip time (RTT) in milliseconds for each active port.
+* 💻 **Interactive CLI Interface:** Features a dedicated terminal prompt with state management, history, and a built-in `help` menu.
+* 🛡️ **Resilience & Error Handling:** Handles DNS failures, network timeouts, file descriptor limits, and manual interruptions (`Ctrl+C`).
+
+### 🏗️ Architecture & OOP (How it works under the hood)
+
+The code is heavily modularized into three main classes:
+
+* `TargetResolver`: Isolates DNS resolution logic from domain names to IP addresses.
+* `NetworkScanner`: The core network engine that handles TCP sockets, *TCP Connect Scans*, and *Banner Grabbing*.
+* `TerminalInterface`: Manages the interactive terminal loop and user inputs.
+
+### 🕹️ Terminal Commands
+
+| Command | Description | Example |
+| --- | --- | --- |
+| `help` | Displays the help menu with all available commands. | `help` |
+| `set target <host>` | Sets the target IP or domain to scan. | `set target scanme.nmap.org` |
+| `set ports <range/list>` | Sets ports (supports ranges and commas). | `set ports 1-1024` or `set ports 80,443,22` |
+| `set timeout <sec>` | Sets the socket connection timeout in seconds. | `set timeout 1.5` |
+| `set threads <qty>` | Sets the number of simultaneous threads. | `set threads 50` |
+| `show options` | Displays a summary of current session settings. | `show options` |
+| `scan` | Triggers the port scan on the configured target. | `scan` |
+| `results` | Shows detailed results from the last scan. | `results` |
+| `clear` | Clears the terminal screen. | `clear` |
+| `exit` | Safely exits the application. | `exit` |
+
+### 🚀 How to Run
+
+---
+
+## ⚠️ Aviso Legal / Disclaimer
+
+> 🇧🇷 **Aviso:** Desenvolvido estritamente para **fins educacionais** e testes de segurança autorizados. Varreduras não autorizadas em redes de terceiros são ilegais.
+> 🇺🇸 **Disclaimer:** Developed strictly for **educational purposes** and authorized security assessments. Unauthorized scanning on third-party networks is illegal.
+
+## 📝 Licença / License
+
+Este projeto está sob a licença **MIT** / This project is licensed under the **MIT License**.
