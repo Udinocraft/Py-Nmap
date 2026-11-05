@@ -1,95 +1,511 @@
+# 🐍 Py-Nmap
+
+**Python-Based TCP Port Scanner Inspired by Nmap**
+
+[![Python](https://img.shields.io/badge/Python-3-blue?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Networking](https://img.shields.io/badge/Focus-Network%20Scanning-2563eb?style=for-the-badge)](https://github.com/Udinocraft/Py-Nmap)
+[![TCP](https://img.shields.io/badge/Protocol-TCP-111827?style=for-the-badge)](https://github.com/Udinocraft/Py-Nmap)
+[![Languages](https://img.shields.io/badge/Languages-PT--BR%20%7C%20EN--UK-16a34a?style=for-the-badge)](#-languages)
+
 ## 🇧🇷 Português
 
-### 🧐 O que é este projeto?
+### 1. Sobre o Projeto
 
-O **Py-Nmap Terminal** é um simulador de scanner de portas executado diretamente no terminal em formato CLI (Command Line Interface). Inspirado no clássico `nmap`, ele permite que administradores de rede, estudantes de segurança da informação e entusiastas realizem varreduras TCP em alvos locais ou remotos de forma controlada, rápida e modular.
+O **Py-Nmap Terminal** é um projeto desenvolvido em Python que simula algumas funcionalidades de uma ferramenta de reconhecimento de redes e varredura de portas, inspirado no Nmap.
 
-O projeto foi construído para demonstrar conceitos avançados de programação em Python, como manipulação de sockets de rede, paralelismo com ThreadPools, resolução de DNS e tratamento rigoroso de exceções de sistema e rede.
+A aplicação funciona diretamente no terminal através de uma interface CLI interativa, permitindo configurar um alvo, selecionar portas, ajustar parâmetros de conexão e executar verificações TCP.
 
-### ✨ Principais Funcionalidades
+O projeto foi desenvolvido com finalidade educacional, buscando aplicar conhecimentos de Python, redes de computadores, sockets, resolução DNS, programação concorrente e Programação Orientada a Objetos.
 
-* 🚀 **Varredura Concorrente:** Utiliza `ThreadPoolExecutor` para testar centenas de portas em segundos sem travar a aplicação.
-* 🔍 **Banner Grabbing Inteligente:** Tenta capturar a assinatura do serviço rodando na porta (como versões de SSH, FTP e cabeçalhos HTTP).
-* ⏱️ **Medição de Latência:** Calcula o tempo de resposta (RTT) em milissegundos de cada porta ativa.
-* 💻 **Interface CLI Interativa:** Um ambiente próprio com prompt dinâmico, gerenciamento de estados, histórico e menu de ajuda (`help`).
-* 🛡️ **Resiliência e Tratamento de Erros:** Trata falhas de DNS, timeouts de rede, estouro de descritores de arquivos e interrupções manuais (`Ctrl+C`).
+### 2. Principais funcionalidades
 
-### 🏗️ Arquitetura e POO (Como funciona por dentro)
+| Funcionalidade | Descrição |
+|---|---|
+| 🔍 Varredura TCP | Verifica a disponibilidade de portas por meio de conexões TCP |
+| 🌐 Resolução DNS | Converte nomes de domínio em endereços IPv4 |
+| ⚡ Varredura concorrente | Utiliza `ThreadPoolExecutor` para executar verificações simultâneas |
+| 🏷️ Banner Grabbing | Tenta obter informações apresentadas pelo serviço conectado |
+| ⏱️ Medição de latência | Calcula o tempo de resposta da conexão |
+| 🎯 Configuração de alvo | Permite definir um domínio ou endereço IP |
+| 🔧 Configuração de portas | Aceita intervalos ou listas de portas |
+| ⚙️ Configuração de timeout | Permite ajustar o tempo limite de conexão |
+| 🧵 Controle de threads | Permite definir o número de tarefas concorrentes |
+| 📊 Resultados | Exibe informações sobre as portas abertas encontradas |
 
-O código é altamente modularizado, dividido em três classes principais:
+### 3. Arquitetura e Programação Orientada a Objetos
 
-* `TargetResolver`: Isola a lógica de tradução de nomes de domínio (DNS) para endereços IP.
-* `NetworkScanner`: O motor de rede que cria sockets TCP, executa o *TCP Connect Scan* e faz o *Banner Grabbing*.
-* `TerminalInterface`: Gerencia o loop interativo do terminal e valida as entradas do usuário.
+O projeto está organizado em três classes principais.
 
-### 🕹️ Comandos Disponíveis no Terminal
+**`TargetResolver`**
+
+Responsável pela resolução DNS, convertendo nomes de domínio em endereços IP através de `socket.gethostbyname()`.
+
+**`NetworkScanner`**
+
+Responsável pelo funcionamento principal do scanner.
+
+Suas atividades incluem:
+
+- Criação de sockets TCP.
+- Verificação de portas.
+- Medição de latência.
+- Captura de banners.
+- Execução concorrente das verificações.
+- Organização dos resultados.
+
+**`TerminalInterface`**
+
+Responsável pela interface interativa do programa.
+
+Gerencia:
+
+- Entrada de comandos.
+- Configuração do alvo.
+- Configuração das portas.
+- Timeout.
+- Número de threads.
+- Exibição das opções.
+- Armazenamento dos resultados da última varredura.
+
+### 4. Funcionamento técnico
+
+A ferramenta utiliza sockets TCP para tentar estabelecer conexões com as portas selecionadas.
+
+O método `connect_ex()` é utilizado para verificar o resultado da tentativa de conexão.
+
+Quando uma conexão é estabelecida, o programa:
+
+1. Registra a porta como aberta.
+2. Calcula o tempo de resposta.
+3. Tenta capturar o banner do serviço.
+4. Armazena as informações encontradas.
+5. Exibe os resultados no terminal.
+
+A execução concorrente é implementada utilizando `ThreadPoolExecutor`, permitindo que diferentes portas sejam verificadas simultaneamente.
+
+O programa utiliza uma abordagem TCP Connect Scan. Ele não implementa varredura SYN stealth, detecção completa de versões ou identificação avançada de sistemas operacionais como o Nmap original.
+
+### 5. Comandos disponíveis
+
+O Py-Nmap possui uma interface própria de terminal.
 
 | Comando | Descrição | Exemplo |
-| --- | --- | --- |
-| `help` | Exibe o menu de ajuda com todos os comandos. | `help` |
-| `set target <host>` | Define o IP ou domínio alvo da varredura. | `set target scanme.nmap.org` |
-| `set ports <range/lista>` | Define as portas (suporta intervalos e vírgulas). | `set ports 1-1024` ou `set ports 80,443,22` |
-| `set timeout <seg>` | Define o tempo limite (em segundos) de espera do socket. | `set timeout 1.5` |
-| `set threads <qtd>` | Define o número de threads simultâneas. | `set threads 50` |
-| `show options` | Exibe um resumo das configurações atuais da sessão. | `show options` |
-| `scan` | Dispara a varredura de portas no alvo configurado. | `scan` |
-| `results` | Mostra os resultados detalhados da última varredura. | `results` |
-| `clear` | Limpa a tela do terminal. | `clear` |
-| `exit` | Encerra a aplicação de forma segura. | `exit` |
+|---|---|---|
+| `help` | Exibe o menu de ajuda | `help` |
+| `set target <host>` | Define o alvo | `set target 127.0.0.1` |
+| `set ports <range/list>` | Define as portas | `set ports 1-1024` |
+| `set timeout <sec>` | Define o timeout | `set timeout 1.5` |
+| `set threads <qty>` | Define a quantidade de threads | `set threads 50` |
+| `show options` | Exibe as configurações atuais | `show options` |
+| `scan` | Executa a varredura | `scan` |
+| `results` | Exibe os resultados da última varredura | `results` |
+| `clear` | Limpa a tela | `clear` |
+| `exit` | Encerra o programa | `exit` |
 
+### 6. Exemplos de configuração
+
+Definir um alvo:
+
+```bash
+set target 127.0.0.1
+```
+
+Selecionar um intervalo de portas:
+
+```bash
+set ports 1-1024
+```
+
+Selecionar portas específicas:
+
+```bash
+set ports 22,80,443,8080
+```
+
+Configurar o timeout:
+
+```bash
+set timeout 1.5
+```
+
+Configurar o número de threads:
+
+```bash
+set threads 50
+```
+
+Visualizar as configurações:
+
+```bash
+show options
+```
+
+Executar a varredura:
+
+```bash
+scan
+```
+
+Consultar os resultados:
+
+```bash
+results
+```
+
+### 7. Tecnologias e bibliotecas
+
+| Tecnologia | Aplicação |
+|---|---|
+| Python 3 | Linguagem principal |
+| `socket` | Comunicação e conexões TCP |
+| `sys` | Recursos do ambiente Python |
+| `time` | Medição de tempo e latência |
+| `ThreadPoolExecutor` | Execução concorrente |
+| `as_completed` | Acompanhamento das tarefas concluídas |
+| `typing` | Anotações de tipos |
+| Programação Orientada a Objetos | Organização da aplicação |
+
+O projeto utiliza bibliotecas da distribuição padrão do Python.
+
+### 8. Como executar
+
+**Requisitos:**
+- Python 3 instalado.
+- Terminal compatível.
+- Conectividade de rede para verificar alvos remotos.
+
+Clone o repositório:
+
+```bash
+git clone https://github.com/Udinocraft/Py-Nmap.git
+```
+
+Entre na pasta:
+
+```bash
+cd Py-Nmap
+```
+
+Execute:
+
+```bash
+python Py-Nmap.py
+```
+
+Em algumas distribuições Linux, utilize:
+
+```bash
+python3 Py-Nmap.py
+```
+
+Após iniciar, digite:
+
+```bash
+help
+```
+
+Para visualizar todos os comandos disponíveis.
+
+### 9. Relatórios e documentação
+
+O projeto possui relatórios complementares em português e inglês.
+
+- [Relatório em português](RELATORIO-PT.pdf)
+- [Report in English](REPORT-ENG.pdf)
+
+Esses documentos complementam o código e apresentam informações sobre o desenvolvimento, tecnologias utilizadas e decisões técnicas.
+
+### 10. Limitações técnicas
+
+O Py-Nmap é uma implementação educacional e não pretende substituir o Nmap original.
+
+Algumas limitações importantes:
+
+- Realiza verificações TCP Connect.
+- A resolução DNS utiliza `socket.gethostbyname()`, com foco em IPv4.
+- O banner grabbing depende da resposta disponibilizada pelo serviço.
+- Alguns serviços não enviam banners espontaneamente.
+- Portas filtradas, firewalls e timeouts podem impedir uma conclusão definitiva.
+- O reconhecimento de serviços não equivale a uma identificação completa de versões.
+- Não implementa todos os métodos de varredura e recursos do Nmap.
+
+Uma porta que não aparece como aberta não deve ser automaticamente considerada fechada: a conexão pode ter falhado por diferentes motivos.
+
+### 11. Aprendizados
+
+O desenvolvimento do Py-Nmap permitiu trabalhar com:
+
+- Fundamentos de redes de computadores.
+- Comunicação TCP.
+- Sockets em Python.
+- Resolução DNS.
+- Varredura de portas.
+- Banner Grabbing.
+- Programação concorrente.
+- ThreadPool.
+- Tratamento de exceções.
+- Organização de aplicações em classes.
+- Desenvolvimento de ferramentas de linha de comando.
+
+### 12. Ética e uso responsável
+
+O Py-Nmap deve ser utilizado exclusivamente em ambientes próprios, laboratórios controlados ou redes para as quais exista autorização explícita.
+
+A varredura de sistemas de terceiros sem autorização pode violar leis, políticas de uso e regras de segurança.
+
+O projeto foi desenvolvido para estudo de redes e cibersegurança, não para atividades de acesso não autorizado.
+
+### 13. Melhorias futuras
+
+Possíveis evoluções incluem:
+
+- Melhorias no tratamento de erros.
+- Relatórios exportáveis.
+- Identificação mais detalhada de serviços.
+- Melhor organização dos resultados.
+- Novos recursos de configuração.
+- Testes automatizados.
+- Aprimoramento da interface CLI.
 
 ---
 
----
+## 🇬🇧 English (UK)
 
-## 🇺🇸 English
+### 1. About the Project
 
-### 🧐 What is this project?
+**Py-Nmap Terminal** is a Python project that simulates selected features of a network reconnaissance and port-scanning tool, inspired by Nmap.
 
-**Py-Nmap Terminal** is an advanced educational network reconnaissance tool and port scanner CLI (Command Line Interface) inspired by the classic `nmap`. It allows network administrators, cybersecurity students, and enthusiasts to perform TCP port scans on local or remote targets in a controlled, fast, and modular way.
+It runs directly in the terminal through an interactive Command-Line Interface (CLI), allowing users to configure targets, select ports, adjust connection parameters and perform TCP checks.
 
-The project demonstrates advanced Python programming concepts, such as low-level network socket manipulation, concurrency with ThreadPools, DNS resolution, and robust exception handling.
+The project was developed for educational purposes, applying Python programming, computer networking, sockets, DNS resolution, concurrency and Object-Oriented Programming.
 
-### ✨ Key Features
+### 2. Key Features
 
-* 🚀 **Concurrent Scanning:** Uses `ThreadPoolExecutor` to test hundreds of ports in seconds without freezing.
-* 🔍 **Smart Banner Grabbing:** Attempts to capture service signatures running on open ports (such as SSH, FTP versions, and HTTP headers).
-* ⏱️ **Latency Measurement:** Calculates the round-trip time (RTT) in milliseconds for each active port.
-* 💻 **Interactive CLI Interface:** Features a dedicated terminal prompt with state management, history, and a built-in `help` menu.
-* 🛡️ **Resilience & Error Handling:** Handles DNS failures, network timeouts, file descriptor limits, and manual interruptions (`Ctrl+C`).
+| Feature | Description |
+|---|---|
+| 🔍 TCP Scanning | Checks port availability through TCP connections |
+| 🌐 DNS Resolution | Resolves domain names into IPv4 addresses |
+| ⚡ Concurrent Scanning | Uses `ThreadPoolExecutor` for simultaneous checks |
+| 🏷️ Banner Grabbing | Attempts to retrieve information provided by connected services |
+| ⏱️ Latency Measurement | Measures connection response time |
+| 🎯 Target Configuration | Accepts domain names or IP addresses |
+| 🔧 Port Configuration | Supports port ranges and lists |
+| ⚙️ Timeout Configuration | Allows connection timeout adjustments |
+| 🧵 Thread Management | Controls the number of concurrent tasks |
+| 📊 Results | Displays information about discovered open ports |
 
-### 🏗️ Architecture & OOP (How it works under the hood)
+### 3. Architecture and Object-Oriented Programming
 
-The code is heavily modularized into three main classes:
+The application is organised into three main classes.
 
-* `TargetResolver`: Isolates DNS resolution logic from domain names to IP addresses.
-* `NetworkScanner`: The core network engine that handles TCP sockets, *TCP Connect Scans*, and *Banner Grabbing*.
-* `TerminalInterface`: Manages the interactive terminal loop and user inputs.
+**`TargetResolver`**
 
-### 🕹️ Terminal Commands
+Handles DNS resolution through `socket.gethostbyname()`.
+
+**`NetworkScanner`**
+
+The main scanning component. It handles TCP sockets, port checks, latency measurements, banner grabbing, concurrent execution and result organisation.
+
+**`TerminalInterface`**
+
+Manages the interactive terminal, command processing, target configuration, port selection, timeout, thread settings and scan results.
+
+### 4. Technical Operation
+
+The scanner uses TCP sockets to attempt connections to selected ports.
+
+The `connect_ex()` method checks the result of each connection attempt.
+
+When a connection is established, the application records the port as open, measures response time, attempts banner grabbing and stores the collected information.
+
+Concurrent execution is implemented through `ThreadPoolExecutor`.
+
+The project uses a TCP Connect Scan approach. It does not implement stealth SYN scanning, full version detection or advanced operating-system fingerprinting like the original Nmap.
+
+### 5. Available Commands
 
 | Command | Description | Example |
-| --- | --- | --- |
-| `help` | Displays the help menu with all available commands. | `help` |
-| `set target <host>` | Sets the target IP or domain to scan. | `set target scanme.nmap.org` |
-| `set ports <range/list>` | Sets ports (supports ranges and commas). | `set ports 1-1024` or `set ports 80,443,22` |
-| `set timeout <sec>` | Sets the socket connection timeout in seconds. | `set timeout 1.5` |
-| `set threads <qty>` | Sets the number of simultaneous threads. | `set threads 50` |
-| `show options` | Displays a summary of current session settings. | `show options` |
-| `scan` | Triggers the port scan on the configured target. | `scan` |
-| `results` | Shows detailed results from the last scan. | `results` |
-| `clear` | Clears the terminal screen. | `clear` |
-| `exit` | Safely exits the application. | `exit` |
+|---|---|---|
+| `help` | Displays the help menu | `help` |
+| `set target <host>` | Sets the target | `set target 127.0.0.1` |
+| `set ports <range/list>` | Sets the ports | `set ports 1-1024` |
+| `set timeout <sec>` | Sets the timeout | `set timeout 1.5` |
+| `set threads <qty>` | Sets the number of threads | `set threads 50` |
+| `show options` | Displays current settings | `show options` |
+| `scan` | Runs the scan | `scan` |
+| `results` | Displays the last scan results | `results` |
+| `clear` | Clears the terminal | `clear` |
+| `exit` | Exits the application | `exit` |
 
-### 🚀 How to Run
+### 6. Example Configuration
+
+Set a target:
+
+```bash
+set target 127.0.0.1
+```
+
+Select a port range:
+
+```bash
+set ports 1-1024
+```
+
+Select specific ports:
+
+```bash
+set ports 22,80,443,8080
+```
+
+Set the timeout:
+
+```bash
+set timeout 1.5
+```
+
+Set the number of threads:
+
+```bash
+set threads 50
+```
+
+Display the current settings:
+
+```bash
+show options
+```
+
+Run the scan:
+
+```bash
+scan
+```
+
+Display the results:
+
+```bash
+results
+```
+
+### 7. Technologies and Libraries
+
+| Technology | Application |
+|---|---|
+| Python 3 | Main programming language |
+| `socket` | TCP communication and connections |
+| `sys` | Python environment resources |
+| `time` | Time and latency measurements |
+| `ThreadPoolExecutor` | Concurrent execution |
+| `as_completed` | Monitoring completed tasks |
+| `typing` | Type annotations |
+| Object-Oriented Programming | Application organisation |
+
+The project uses Python standard-library modules.
+
+### 8. How to Run
+
+**Requirements:**
+- Python 3.
+- Compatible terminal.
+- Network connectivity for remote target checks.
+
+Clone the repository:
+
+```bash
+git clone https://github.com/Udinocraft/Py-Nmap.git
+```
+
+Enter the project directory:
+
+```bash
+cd Py-Nmap
+```
+
+Run the application:
+
+```bash
+python Py-Nmap.py
+```
+
+On some Linux distributions, use:
+
+```bash
+python3 Py-Nmap.py
+```
+
+Once the application starts, type:
+
+```bash
+help
+```
+
+To display the available commands.
+
+### 9. Reports and Documentation
+
+The project includes complementary reports in Brazilian Portuguese and English.
+
+- [Portuguese report](RELATORIO-PT.pdf)
+- [English report](REPORT-ENG.pdf)
+
+These documents provide additional information about development, technologies and technical decisions.
+
+### 10. Technical Limitations
+
+Py-Nmap is an educational implementation and is not intended to replace the original Nmap.
+
+Important limitations include:
+
+- Uses TCP Connect checks.
+- DNS resolution relies on `socket.gethostbyname()`, focusing on IPv4.
+- Banner grabbing depends on the response provided by the service.
+- Some services do not send banners spontaneously.
+- Firewalls, filtered ports and timeouts may prevent definitive conclusions.
+- Service recognition does not provide complete version identification.
+- It does not implement every scanning method or feature available in Nmap.
+
+A port that is not reported as open should not automatically be considered closed.
+
+### 11. Key Takeaways
+
+Developing Py-Nmap provided practical experience in:
+
+- Computer networking fundamentals.
+- TCP communication.
+- Python sockets.
+- DNS resolution.
+- Port scanning.
+- Banner grabbing.
+- Concurrent programming.
+- Thread pools.
+- Exception handling.
+- Class-based application design.
+- Command-line tool development.
+
+### 12. Ethics and Responsible Use
+
+Py-Nmap must only be used on systems owned by the user, controlled laboratory environments or networks for which explicit authorisation has been granted.
+
+Unauthorised scanning of third-party systems may violate laws, usage policies and security rules.
+
+The project was developed for networking and cybersecurity education, not unauthorised access.
+
+### 13. Future Improvements
+
+Potential improvements include:
+
+- Better error handling.
+- Exportable reports.
+- More detailed service identification.
+- Improved result organisation.
+- Additional configuration features.
+- Automated testing.
+- CLI interface improvements.
 
 ---
 
-## ⚠️ Aviso Legal / Disclaimer
-
-> 🇧🇷 **Aviso:** Desenvolvido estritamente para **fins educacionais** e testes de segurança autorizados. Varreduras não autorizadas em redes de terceiros são ilegais.
-> 🇺🇸 **Disclaimer:** Developed strictly for **educational purposes** and authorized security assessments. Unauthorized scanning on third-party networks is illegal.
-
-## 📝 Licença / License
-
-Este projeto está sob a licença **MIT** / This project is licensed under the **MIT License**.
+**Project:** Py-Nmap  
+**Repository:** [github.com/Udinocraft/Py-Nmap](https://github.com/Udinocraft/Py-Nmap)  
+**Language:** Python 3  
+**Focus:** TCP Port Scanning and Network Reconnaissance  
+**Purpose:** Educational Cybersecurity and Networking Research
