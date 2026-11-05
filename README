@@ -2,11 +2,6 @@
 
 **Python-Based TCP Port Scanner Inspired by Nmap**
 
-[![Python](https://img.shields.io/badge/Python-3-blue?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![Networking](https://img.shields.io/badge/Focus-Network%20Scanning-2563eb?style=for-the-badge)](https://github.com/Udinocraft/Py-Nmap)
-[![TCP](https://img.shields.io/badge/Protocol-TCP-111827?style=for-the-badge)](https://github.com/Udinocraft/Py-Nmap)
-[![Languages](https://img.shields.io/badge/Languages-PT--BR%20%7C%20EN--UK-16a34a?style=for-the-badge)](#-languages)
-
 ## 🇧🇷 Português
 
 ### 1. Sobre o Projeto
@@ -505,7 +500,7 @@ Potential improvements include:
 ---
 
 **Project:** Py-Nmap  
-**Repository:** [github.com/Udinocraft/Py-Nmap](https://github.com/Udinocraft/Py-Nmap)  
+**Repository:** github.com/Udinocraft/Py-Nmap https://github.com/Udinocraft/Py-Nmap
 **Language:** Python 3  
 **Focus:** TCP Port Scanning and Network Reconnaissance  
 **Purpose:** Educational Cybersecurity and Networking Research
